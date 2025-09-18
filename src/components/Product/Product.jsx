@@ -1,9 +1,11 @@
 import { useCartDispatch } from "../../context/CartContext";
 import { useCart } from "../../context/CartContext";
+import { useInventoryDispatch } from "../../context/InventoryContext";
 
 export default function Product({ product }) {
     const cartItems = useCart();
     const dispatchToCart = useCartDispatch();
+    const dispatchToInventory = useInventoryDispatch();
 
     const onCartToggle = () => {
         if (cartItems.some((item) => item.productName === product.productName)) {
@@ -17,6 +19,13 @@ export default function Product({ product }) {
                 ...product,
             });
         }
+    };
+
+    const onDeleteProduct = () => {
+        dispatchToInventory({
+            type: "DELETE_PRODUCT",
+            productName: product.productName, // better if you later switch to product.id
+        });
     };
 
     return (

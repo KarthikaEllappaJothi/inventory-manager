@@ -5,7 +5,7 @@ const InventoryContext = createContext(null)
 const InventoryDispatchContext = createContext(null)
 
 export const InventoryProvider = ({children}) => {
-    const [inventoryInLS, setInventoryInLS] = useLocalStorage("inventory", initialInventory)
+    const [inventoryInLS, setInventoryInLS] = useLocalStorage("inventory", [])
     const [inventory, dispatch] = useReducer(inventoryReducer, inventoryInLS)
 
     useEffect(()=>{
@@ -40,6 +40,11 @@ const inventoryReducer = (state, action) => {
                 stock: parseInt(action.stock),
             }]
         }
+        case 'DELETE_PRODUCT': {
+            return state.filter(
+                (product) => product.productName !== action.productName
+            )
+        }
         case 'STOCK_ADDED': {
             return state.map(product =>
                 product.productName === action.productName
@@ -62,5 +67,7 @@ const inventoryReducer = (state, action) => {
 }
 
 const initialInventory = [
-    {productName: 'Sample Item', imageUrl:'/cartImage.png', price: 0, tags: ["sample"], stock: 1},
+    {productName: 'Sample Item', imageUrl:'/cartImage.png', price: 10, tags: ["sample"], stock: 1},
+    {productName: 'Ice cream', imageUrl:'/ice cream.png', price: 23, tags: ["sample"], stock: 16},
+    {productName: 'Chocolate', imageUrl:'/chocolate.jpg', price: 32, tags: ["sample"], stock: 21},
 ]
